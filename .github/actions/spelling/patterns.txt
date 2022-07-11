@@ -10,9 +10,11 @@
 \b(?:B|BR|Br|F|FR|Fr|R|RB|RF|Rb|Rf|U|UR|Ur|b|bR|br|f|fR|fr|r|rB|rF|rb|rf|u|uR|ur)'
 
 # identifier strings returned as results
-[0-9][A-Za-z]
+<td>.+<\/td>
 
-[0-9a-fA-F]+\b-
-\b-[0-9a-fA-F]+
+#[0-9][A-Za-z]
 
-drs:\/\/dg\.4DFC:[-0-9a-fA-F]+
+#[0-9a-fA-F]+\b-
+#\b-[0-9a-fA-F]+
+
+#drs:\/\/dg\.4DFC:[-0-9a-fA-F]+
