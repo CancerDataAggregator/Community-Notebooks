@@ -1,0 +1,17 @@
+name: spelling
+
+on:
+  pull_request_target:
+  push:
+  issue_comment:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Codespell action
+          uses: plettich/python_codespell_action@v0.1
+
+    
