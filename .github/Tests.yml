@@ -2,10 +2,10 @@ name: Tests
 
 on:
   pull_request_target:
+    types: [created, edited]
   push:
   issue_comment:
     types: [created, edited]
-  issues: [opened, edited]
 
 jobs:
   Tests:
