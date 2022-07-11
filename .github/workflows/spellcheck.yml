@@ -24,4 +24,4 @@ jobs:
       - name: Codespell action
         uses: codespell-project/actions-codespell@master
       - name: fix
-        run: codespell . -w
+        run: codespell -w
