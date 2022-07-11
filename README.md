@@ -17,6 +17,6 @@ without having to install anything, click on the logo below. This will
 launch a Jupyter Notebook instance with our example notebook ready to run.
 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/CancerDataAggregator/Community-Notebooks/HEAD?labpath=docs%2FWelcome.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/CancerDataAggregator/Community-Notebooks/HEAD?labpath=Welcome.ipynb)
 
 If you would like to bulk download the notebooks the easiest way is to clone this repo.
