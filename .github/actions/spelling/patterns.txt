@@ -10,7 +10,9 @@
 \b(?:B|BR|Br|F|FR|Fr|R|RB|RF|Rb|Rf|U|UR|Ur|b|bR|br|f|fR|fr|r|rB|rF|rb|rf|u|uR|ur)'
 
 # identifier strings returned as results
+[0-9][A-Za-z]
 
-[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}
+[0-9a-fA-F]+\b-
+\b-[0-9a-fA-F]
 
 drs:\/\/dg\.4DFC:[-0-9a-fA-F]+
