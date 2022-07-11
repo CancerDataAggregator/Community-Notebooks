@@ -10,7 +10,7 @@
 \b(?:B|BR|Br|F|FR|Fr|R|RB|RF|Rb|Rf|U|UR|Ur|b|bR|br|f|fR|fr|r|rB|rF|rb|rf|u|uR|ur)'
 
 # identifier strings returned as results
-<td>\S+<\/td>
+<td>\S+?<\/td>
 
 #[0-9][A-Za-z]
 
