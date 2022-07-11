@@ -1,1 +1,1 @@
-\<table(.|\n)*\/table\>
+<table(.|\n)*\/table>
