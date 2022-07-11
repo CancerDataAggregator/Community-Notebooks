@@ -1,1 +1,1 @@
-<table(.|\n)*\/table>
+qr/\<table(.|\n)*\/table\>/
