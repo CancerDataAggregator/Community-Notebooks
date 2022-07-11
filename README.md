@@ -1,6 +1,6 @@
 # CDA Community Notebook Library
 
-This public repository is a place to share demonstration notebooks that show what you have done with CDA.
+This public repository is a place to share demonstration notebooks that show what you have done with CDA python
 
 ## Contributing
 
