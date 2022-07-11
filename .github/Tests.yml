@@ -7,8 +7,9 @@ on:
     types: [created]
 
 jobs:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses:codespell-project/actions-codespell@master
         with:
-          check_filenames: true actions/checkout@v2
+          check_filenames: true
