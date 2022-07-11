@@ -9,7 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-  - name: Codespell action
-      uses: plettich/python_codespell_action@v0.1
+    steps:
+      - uses: actions/checkout@v2
+      - name: Codespell action
+          uses: plettich/python_codespell_action@v0.1
 
     
