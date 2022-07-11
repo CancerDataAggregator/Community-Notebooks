@@ -1,11 +1,3 @@
----
-name: Community Notebook Submission
-about: Submitting a Community Notebook to the CDA notebook library
-title: ''
-labels: ''
-assignees: 'acharbonneau'
----
-
 Thank you for contributing a notebook to the CDA Community Notebook Library!
 
 
@@ -33,3 +25,5 @@ Then it will undergo a short manual review to check that there is enough instruc
 If your notebook requires any changes, we will describe the necessary changes in the PR review. 
 
 When your notebook is approved we will merge your PR and add your notebook to the Library listing.
+
+If you have questions, please ping @acharbonneau
