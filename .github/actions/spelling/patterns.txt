@@ -12,9 +12,9 @@
 # identifier strings returned as results
 <td>\S+?<\/td>
 
-#[0-9][A-Za-z]
+[0-9][A-Za-z]
 
-#[0-9a-fA-F]+\b-
-#\b-[0-9a-fA-F]+
+[0-9a-fA-F]+\b-
+\b-[0-9a-fA-F]+
 
-#drs:\/\/dg\.4DFC:[-0-9a-fA-F]+
+drs:\/\/dg\.4DFC:[-0-9a-fA-F]+
