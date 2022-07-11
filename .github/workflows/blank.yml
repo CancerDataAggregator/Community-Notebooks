@@ -22,4 +22,4 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - name: Codespell action
-        uses: plettich/python_codespell_action@v0.1
+        uses: codespell-project/actions-codespell@master
