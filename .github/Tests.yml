@@ -5,6 +5,7 @@ on:
   push:
   issue_comment:
     types: [created, edited]
+  issues: [opened, edited]
 
 jobs:
   Tests:
