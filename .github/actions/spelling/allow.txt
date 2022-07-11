@@ -1,10 +1,5 @@
-biospecimen
-aliquoted
 ALLDATA
 allmetadata
-analyte
-biosamples
-biosample
 brainall
 braindiagnosis
 braindiagnosistreatment
