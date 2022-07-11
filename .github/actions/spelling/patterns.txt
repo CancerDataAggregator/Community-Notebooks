@@ -19,4 +19,4 @@
 
 #drs:\/\/dg\.4DFC:[-0-9a-fA-F]+
 
-<td>BEDPE<\/td>
+<td>BEDPE</td>
