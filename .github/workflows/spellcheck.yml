@@ -5,9 +5,13 @@ name: Spellcheck Bot
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   pull_request:
-  
+
+env:
+  exitcode: o
+
 jobs:  
   build:
+    
     # Check if the PR is not raised by this workflow and is not from a fork
     if: startsWith(github.head_ref, 'spelling/') == false && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
@@ -25,11 +29,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install codespell
           codespell
+          let "exitcode=$?"
           
   fix:
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ failure() }}
+    if: $exitcode == 65
     steps:
       - name: spellfix
         run: codespell -w
