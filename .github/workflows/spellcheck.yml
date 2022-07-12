@@ -23,12 +23,12 @@ jobs:
         with:
           python-version: 3.9
       - name: spelling
-        continue-on-error: true
         shell: sh
         run: |
           python -m pip install --upgrade pip
           python -m pip install codespell
           codespell
+          continue-on-error: true
           
   fix:
     runs-on: ubuntu-latest
