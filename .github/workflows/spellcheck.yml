@@ -33,7 +33,7 @@ jobs:
   fix:
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ needs.build.outputs.exitcode == "Process completed with exit code 65." }}
+    if: ${{ needs.build.outputs.exitcode == 'Process completed with exit code 65.' }}
     steps:
       - name: spellfix
         run: codespell -w
