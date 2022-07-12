@@ -23,9 +23,9 @@ jobs:
         with:
           python-version: 3.9
       - name: spelling
+        continue-on-error: true
         shell: sh
         run: |
-          continue-on-error: true
           python -m pip install --upgrade pip
           python -m pip install codespell
           get_err=$(codespell 2>&1 > /dev/null)
