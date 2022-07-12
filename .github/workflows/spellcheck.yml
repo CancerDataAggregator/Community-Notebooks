@@ -1,29 +1,20 @@
 # This is a basic workflow to help you get started with Actions
 
 name: Spellcheck Bot
-
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   pull_request:
-    branches: 
-      - '**'
-      - ${{ github.head_ref }} 
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  
+jobs:  
+  autopep8:
+    # Check if the PR is not raised by this workflow and is not from a fork
+    if: startsWith(github.head_ref, 'autopep8-patches') == false && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
@@ -33,8 +24,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install codespell
           codespell -w
-
-      # Make changes to pull request here
       - name: autopep8
         id: autopep8
         uses: peter-evans/autopep8@v1
@@ -44,16 +33,17 @@ jobs:
         id: vars
         run: echo ::set-output name=branch-name::"autopep8-patches/${{ github.head_ref }}"
       - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.ALLTHEACTIONS }}
+        if: steps.autopep8.outputs.exit-code == 2
+        uses: peter-evans/create-pull-request@v4
+                  token: ${{ secrets.ALLTHEACTIONS }}
           title: Auto Spell Check for ${{ github.head_ref }}
           base: ${{ github.head_ref }}
+          labels: autopep8
+          branch: ${{ steps.vars.outputs.branch-name }}
           commit-message: Auto Spell Check
           body: |
             Hello @${{ github.actor }}, thank you for contributing to the CDA Community Notebook Library. Our bot has detected spelling errors in your submission. Please review it's suggested changes here. To accept the suggestions, merge this PR. To reject the suggestions, close this PR and make the necessary fixes in your original PR. 
-      - name: fail check
-        run: | 
-              git restore *
-              codespell
+      - name: Fail if autopep8 made changes
+        if: steps.autopep8.outputs.exit-code == 2
+        run: exit 1
+
