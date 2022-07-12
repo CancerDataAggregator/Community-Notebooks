@@ -45,16 +45,8 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.ALLTHEACTIONS }}
-          title: Auto Spell Check
+          title: Auto Spell Check for ${{ github.head_ref }}
           base: ${{ github.head_ref }}
           commit-message: Auto Spell Check
           body: |
-            Merges in suggested changes from Codespell. 
-
-      - name: Enable Pull Request Automerge
-        if: steps.cpr.outputs.pull-request-operation == 'created'
-        uses: peter-evans/enable-pull-request-automerge@v2
-        with:
-          token: ${{ secrets.ALLTHEACTIONS }}
-          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          merge-method: squash
+            Hello ${{GITHUB_ACTOR}}, thank you for contributing to the CDA Community Notebook Library. Our bot has detected spelling errors in your submission. Please review it's suggested changes here. To accept the suggestions, merge this PR. To reject the suggestions, close this PR and make the necessary fixes in your original PR. 
