@@ -35,7 +35,8 @@ jobs:
       - name: Create Pull Request
         if: steps.autopep8.outputs.exit-code == 2
         uses: peter-evans/create-pull-request@v4
-                  token: ${{ secrets.ALLTHEACTIONS }}
+        with:
+          token: ${{ secrets.ALLTHEACTIONS }}
           title: Auto Spell Check for ${{ github.head_ref }}
           base: ${{ github.head_ref }}
           labels: autopep8
