@@ -27,8 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install codespell
           if codespell; then
-          echo "everything is fine"
-          unset ${{ env.excode }}
+          unset env.excode
           else
           codespell -w
           fi
@@ -36,13 +35,13 @@ jobs:
         id: vars
         run: echo ::set-output name=branch-name::"spelling/${{ github.head_ref }}"
       - name: Create Pull Request
-        if: steps.autopep8.outputs.exit-code == 2
+        if: ${{ env.excode == 2}}
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.ALLTHEACTIONS }}
           title: Auto Spell Check for ${{ github.head_ref }}
           base: ${{ github.head_ref }}
-          labels: autopep8
+          labels: spelling
           branch: ${{ steps.vars.outputs.branch-name }}
           commit-message: Auto Spell Check
           body: |
