@@ -39,6 +39,7 @@ jobs:
         with:
           token: ${{ secrets.ALLTHEACTIONS }}
           title: Auto Spell Check
+          base: spellcheck
           commit-message: Auto Spell Check
           body: |
             Merges in suggested changes from Codespell. 
