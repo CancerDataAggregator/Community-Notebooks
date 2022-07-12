@@ -25,6 +25,7 @@ jobs:
       - name: spelling
         shell: sh
         run: |
+          continue-on-error: true
           python -m pip install --upgrade pip
           python -m pip install codespell
           get_err=$(codespell 2>&1 > /dev/null)
