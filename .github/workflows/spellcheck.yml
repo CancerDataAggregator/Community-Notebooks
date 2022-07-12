@@ -7,7 +7,7 @@ on:
   pull_request:
 
 env:
-  excode: 0
+  excode: 2
   
 jobs:  
   build:
@@ -28,9 +28,9 @@ jobs:
           python -m pip install codespell
           if codespell; then
           echo "everything is fine"
+          unset ${{ env.excode }}
           else
           codespell -w
-          excode=2
           fi
       - name: Set branch name
         id: vars
@@ -48,6 +48,6 @@ jobs:
           body: |
             Hello @${{ github.actor }}, thank you for contributing to the CDA Community Notebook Library. Our bot has detected spelling errors in your submission. Please review it's suggested changes here. To accept the suggestions, merge this PR. To reject the suggestions, close this PR and make the necessary fixes in your original PR. 
       - name: Fail if codespell made changes
-        if: $excode == 2
+        if: ${{ env.excode == 2}}
         run: exit 1
 
