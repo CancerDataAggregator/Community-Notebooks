@@ -46,7 +46,7 @@ jobs:
         with:
           token: ${{ secrets.ALLTHEACTIONS }}
           title: Auto Spell Check
-          branch: ${{ steps.vars.outputs.branch-name }}
+          base: ${{ steps.vars.outputs.branch-name }}
           commit-message: Auto Spell Check
           body: |
             Merges in suggested changes from Codespell. 
