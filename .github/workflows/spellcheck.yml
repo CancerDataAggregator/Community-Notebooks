@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Spellcheck Bot
 
 # Controls when the workflow will run
 on:
@@ -21,9 +21,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - name: Codespell action
-        uses: codespell-project/actions-codespell@master
-      - name: fix
+      - name: Fix spelling
         run: codespell -w
 
       # Make changes to pull request here
