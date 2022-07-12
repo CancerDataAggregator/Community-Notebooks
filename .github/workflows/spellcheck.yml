@@ -27,7 +27,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install codespell
-          get_err=$(codespell 2>)
+          get_err=$(codespell 2>&1 > /dev/null)
           echo $get_err
           echo "::set-output name=codespell_err::$get_err"
           
