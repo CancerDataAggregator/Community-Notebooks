@@ -25,3 +25,24 @@ jobs:
         uses: codespell-project/actions-codespell@master
       - name: fix
         run: codespell -w
+            - uses: actions/checkout@v3
+
+      # Make changes to pull request here
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.ALLTHEACTIONS }}
+          title: Auto Spell Check
+          commit-message: Auto Spell Check
+          body: |
+            Merges in suggested changes from Codespell. 
+
+      - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          token: ${{ secrets.ALLTHEACTIONS }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
