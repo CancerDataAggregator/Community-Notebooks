@@ -25,7 +25,6 @@ jobs:
         uses: codespell-project/actions-codespell@master
       - name: fix
         run: codespell -w
-            - uses: actions/checkout@v3
 
       # Make changes to pull request here
 
