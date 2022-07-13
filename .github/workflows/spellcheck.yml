@@ -31,7 +31,7 @@ jobs:
           echo "everything is fine"
           else
           codespell -w && echo "::set-output name=test::65"
-          
+          fi
           
           
   fix:
