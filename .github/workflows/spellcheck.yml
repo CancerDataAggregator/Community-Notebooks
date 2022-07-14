@@ -1,19 +1,11 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Spellcheck Bot
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  pull_request:
+on: pull_request
 
-jobs:  
+jobs:
   build:
-    
-    # Check if the PR is not raised by this workflow and is not from a fork
-    if: startsWith(github.head_ref, 'spelling/') == false && github.event.pull_request.head.repo.full_name == github.repository
+    #if: startsWith(github.head_ref, 'spelling/') == false && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     outputs:
-      erroutput: ${{ steps.spelling.outputs.test }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -32,8 +24,6 @@ jobs:
           else
           codespell -w && echo "::set-output name=test::65"
           fi
-          
-          
   fix:
     runs-on: ubuntu-latest
     needs: build
@@ -65,7 +55,6 @@ jobs:
           branch: ${{ steps.vars.outputs.branch-name }}
           commit-message: Auto Spell Check
           body: |
-            Hello @${{ github.actor }}, thank you for contributing to the CDA Community Notebook Library. Our bot has detected spelling errors in your submission. Please review it's suggested changes here. To accept the suggestions, merge this PR. To reject the suggestions, close this PR and make the necessary fixes in your original PR. 
+            Hello @${{ github.actor }}, thank you for contributing to the CDA Community Notebook Library. Our bot has detected spelling errors in your submission. Please review it's suggested changes here. To accept the suggestions, merge this PR. To reject the suggestions, close this PR and make the necessary fixes in your original PR.
       - name: Fail if codespell made changes
         run: exit 1
-
