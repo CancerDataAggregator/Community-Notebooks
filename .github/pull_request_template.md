@@ -1,6 +1,5 @@
 Thank you for contributing a notebook to the CDA Community Notebook Library!
 
-
 **What features or workflow does your notebook have**
 
 A short description that we can use to describe your project on the library index
@@ -8,6 +7,10 @@ A short description that we can use to describe your project on the library inde
 **Attribution info**
 
 If you like to be credited for this notebook, please tell us how. Suggestions: Name, institution, company, github id
+
+**List any python modules or other tools that are used in your notebook**
+
+We automatically load cdapython and pandas
 
 **Would you like to be featured in our website?**
 
