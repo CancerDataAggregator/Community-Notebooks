@@ -12,8 +12,6 @@ jobs:
     # Check if the PR is not raised by this workflow and is not from a fork
     if: startsWith(github.head_ref, 'spelling/') == false && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    outputs:
-      erroutput: ${{ steps.spelling.outputs.test }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -30,8 +28,14 @@ jobs:
           if codespell; then
           echo "everything is fine"
           else
-          codespell -w && echo "::set-output name=test::65"
+          codespell -w
           fi
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: |
+           Hello @${{ github.actor }}, thank you for contributing to the CDA Community Notebook Library. Spellcheck bot has checked your submission. If you got a green, we'll be running manual tests shortly. If you got a red X please check out the report in the "Some checks were not successful" above by clicking on the "Details" link next to SpellcheckBot and fix any misspellings. For words that are actually correct, please tell us on this thread so we can add them to the Spellcheck Bot dictionary.
+          GITHUB_TOKEN: ${{ secrets.ALLTHEACTIONS }}
           
           
   fix:
