@@ -16,11 +16,10 @@ jobs:
           python -m pip install -e .
       - uses: "treebeardtech/nbmake-action@v0.2"
         with:
-          path: "./examples"
+          path: "./"
           path-output: .
           notebooks: |
-            'example-notebooks/*.ipynb'
-            'sevenbridges/*/*.ipynb'
+            '*.ipynb'
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
         with:
