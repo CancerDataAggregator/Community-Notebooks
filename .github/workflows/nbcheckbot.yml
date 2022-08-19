@@ -19,7 +19,7 @@ jobs:
           path: "./examples"
           path-output: .
           notebooks: |
-            'community/*.ipynb'
+            'example-notebooks/*.ipynb'
             'sevenbridges/*/*.ipynb'
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v1
