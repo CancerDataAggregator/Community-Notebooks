@@ -15,6 +15,10 @@ If you would like to bulk download the notebooks the easiest way is to clone thi
 
 ## Contributing
 
+# Contributing
+
+If you have comments, questions, or feature requests please tell us at our [Discussions page](https://github.com/CancerDataAggregator/readthedocs/discussions)
+
 Building your notebook:
 
 - On approval your notebook will be added to [this binder](https://mybinder.org/v2/gh/CancerDataAggregator/Community-Notebooks/HEAD?labpath=Welcome.ipynb), so if you can upload and run it in that environment, it should work.
