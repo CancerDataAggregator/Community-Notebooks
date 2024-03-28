@@ -4,7 +4,7 @@ This public repository is a place to share demonstration notebooks that show wha
 
 ## Launch CDA Community Notebooks
 
-To try out community notebooks, no install required! [Try it now](https://colab.research.google.com/github/CancerDataAggregator/Community-Notebooks/blob/main/Welcome.ipynb)
+To try out community notebooks, no install required! [Try it now](https://colab.research.google.com/github/CancerDataAggregator/Community-Notebooks/blob/main/Tutorials/Welcome.ipynb)
 
 If you would like to bulk download the notebooks the easiest way is to clone this repo.
 
