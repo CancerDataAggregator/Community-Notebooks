@@ -1,2 +1,2 @@
 itables
-pip install git+https://github.com/CancerDataAggregator/cdapython.git
+pip install 
