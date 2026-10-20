@@ -6,7 +6,7 @@
    "source": [
     "# Is there anything about kidney cancer already?\n",
     "\n",
-    "*Standalone -- no prior vignette required.*"
+    "*Standalone -- no prior notebook required.*"
    ]
   },
   {
@@ -21,9 +21,21 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": [
+     "hide_code"
+    ]
+   },
    "outputs": [],
    "source": [
+    "try:\n",
+    "  from itables import(\n",
+    "     init_notebook_mode, show \n",
+    "    ) \n",
+    "except:\n",
+    "  !pip install -r https://raw.githubusercontent.com/CancerDataAggregator/Community-Notebooks/main/requirements.txt\n",
+    "\n",
+    "\n",
     "from cdapython import *\n",
     "from itables import init_notebook_mode, show\n",
     "init_notebook_mode(all_interactive=True)\n",
@@ -133,7 +145,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "I still haven't written a single filter, looked up a controlled vocabulary, or checked what table anything lives in. 2,516 subjects with both kidney involvement and sequencing data is enough for me to decide this is worth pursuing -- and if I do, [Getting oriented before I filter](02_systematic_browsing.ipynb) is where I'd go next to actually get oriented in what's here before building a real query."
+    "I still haven't written a single filter, looked up a controlled vocabulary, or checked what table anything lives in. 2,516 subjects with both kidney involvement and sequencing data is enough for me to decide this is worth pursuing -- and if I do, [Getting oriented before I filter](./04_CN_systematic_browsing.ipynb) is where I'd go next to actually get oriented in what's here before building a real query."
    ]
   }
  ],

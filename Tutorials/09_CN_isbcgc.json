@@ -1,0 +1,508 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# **Multi-omics Cohort Building with Cancer Data Aggregator**\n",
+    "\n",
+    "# Example use case:\n",
+    "\n",
+    "This notebook aims to demonstrate building a cohort of specific data types using the Cancer Data Aggregator (CDA). We will be retrieving mutation and gene expression data stored at the Genomic Data Commons (GDC), protein intensity data stored at the Proteomic Data Commons (PDC), and tumor characteristics derived from slide images stored at the Imaging Data Commons (IDC). We then demonstrate how to retrieve the desired derived data of these cases from the ISB-CGC ecosystem to immediately feed into statistical analyses.\n",
+    "\n",
+    "For more information about the CDA data and API visit their site:\n",
+    "https://cda.readthedocs.io\n",
+    "\n",
+    "For more information about the ISB-CGC and the BigQuery Data Ecosystem visit our site:\n",
+    "https://isb-cgc.org\n",
+    "\n",
+    "---\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Setup steps:\n",
+    "First we import the CDA python packages and functions we will be using."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "try:\n",
+    "  from itables import(\n",
+    "     init_notebook_mode, show\n",
+    "    )\n",
+    "except:\n",
+    "  !pip install -r https://raw.githubusercontent.com/CancerDataAggregator/Community-Notebooks/main/requirements.txt\n",
+    "\n",
+    "\n",
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "from itables import init_notebook_mode, show\n",
+    "init_notebook_mode(all_interactive=True)\n",
+    "import itables.options as opt\n",
+    "\n",
+    "opt.classes=\"display\"\n",
+    "opt.buttons=[\"copyHtml5\", \"csvHtml5\", \"excelHtml5\"]\n",
+    "opt.maxBytes=0"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from cdapython import * #tables, columns, column_values, fetch_rows, summary_counts"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---\n",
+    "\n",
+    "The `tables()` function from the CDA package simply returns a list of tables available. These tables each contain various information about the subjects across the connected Data Commons."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "tables()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Considering we are interested in specific data types we can further query the columns of the `file` table by use of the `columns()` function. This returns a set of columns, the format of the data contained in these columns, and a short description."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "columns(table=['file'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "From browsing the results we can infer that `file_type` is likely to contain the information we are after. We can further interrogate the CDA data and retrieve a list of possible values in each field via `column_values()`, which we apply to the `file_type` column."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "column_values('file_type')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---\n",
+    "\n",
+    "The function returns a list of possible data types associated with all subjects. We can browse this and select those pertinent to our analysis. Specifically we will be relying on the `file_type` and `data_source` fields. For example, we can retrieve all cases with Pathology Reports as below:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pathology = get_file_data(match_all=['file_type = Pathology Report'])\n",
+    "pathology.head(3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Selecting data types\n",
+    "\n",
+    "To simplify the cohort building process we will query for data from each data commons (genomic, proteomic, imaging) separately and then perform set operations to determine the overlap. For the genomic component of our analysis we will first retrieve a list of cases with mutation data available from the GDC, followed by the set of cases with RNA gene expression data. More information about the data processing pipelines used by the GDC can be found in their documentation.\n",
+    "\n",
+    "https://gdc.cancer.gov/about-data/gdc-data-processing/genomic-data-processing\n",
+    "\n",
+    "Our first query to retrieve those cases from the GDC that have **Somatic Mutation** data:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "gdc_mutation = get_subject_data(match_any = [\"file_type = Aggregated Somatic Mutation\", \"file_type = Annotated Somatic Mutation\"],\n",
+    "                                data_source = ['GDC'])\n",
+    "gdc_mutation.head(3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can then further query for those cases within the GDC with **Gene Expression** data:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "gdc_expression = get_subject_data(match_all = [\"file_type = Gene Expression Quantification\"],\n",
+    "                                  data_source = ['GDC'])\n",
+    "gdc_expression.head(3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Swapping data commons we can look for those cases that have some **Masked Intensities**, a measure of protein abundance, from the PDC. For more information about the PDC data processing pipelines for these data check the PDC documentation below.\n",
+    "\n",
+    "https://proteomic.datacommons.cancer.gov/pdc/harmonization"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pdc_intensity = get_subject_data(match_all=[\"file_type = Masked Intensities\"],\n",
+    "                           data_source = ['PDC'])\n",
+    "pdc_intensity.head(3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Finally for completeness we query for those cases that have **Slide Images** within the IDC. As with the other commons, more information about the data stored in the IDC and specifically the DICOM format can be found in their documentation.\n",
+    "\n",
+    "https://learn.canceridc.dev/"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "idc_slide = get_subject_data(match_all=[\"file_type = Slide Image\"],\n",
+    "                       data_source = ['IDC'])\n",
+    "idc_slide.head(3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Analyses\n",
+    "\n",
+    "We've generated the lists of cases with the relevant data types available. With these data tables we can generate the overlap to determine our final cohort size through set operations and can retrieve the derived data directly from ISB-CGC hosted BigQuery tables. BigQuery is a tool with unique scaling functionality allowing us to quickly perform table joins between these data tables. For more information about the ISB-CGC BigQuery ecosystem we have a short introductory video.\n",
+    "\n",
+    "https://www.youtube.com/watch?v=5hVgGW346wI\n",
+    "\n",
+    "We can visualize the overlap between our case lists with a venn diagram, for this we'll install the `venny4py` python package as well as a few bigquery functions and `pandas`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!pip install venny4py\n",
+    "from venny4py.venny4py import *\n",
+    "from google.cloud import bigquery\n",
+    "from google.colab import auth\n",
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sets = {\n",
+    "    'Mutation': set(gdc_mutation['subject_id']) - set([None]),\n",
+    "    'Expression': set(gdc_expression['subject_id']) - set([None]),\n",
+    "    'Intensity': set(pdc_intensity['subject_id']) - set([None]),\n",
+    "    'Slide': set(idc_slide['subject_id']) - set([None])\n",
+    "}\n",
+    "\n",
+    "plt.figure(figsize=(4,4), dpi=300)\n",
+    "venny4py(sets=sets)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "final_set = sets['Mutation'].intersection(sets['Expression']).intersection(sets['Intensity']).intersection(sets['Slide'])\n",
+    "formatted_identifiers = ','.join(['\"{}\"'.format(x.split('.')[1]) for x in final_set])\n",
+    "print(','.join(final_set))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Our final overlap of cases across the four chosen data type is 265 cases, all from the TCGA project. This helpfully simplifies the process of retrieving data from the BigQuery ecosystem. To view a searchable interface of these tables we can visit the BigQuery Search Tool:\n",
+    "\n",
+    "https://isb-cgc.appspot.com/bq_meta_search/\n",
+    "\n",
+    "After review the data we are interested in is stored in the following tables for our genomic data types:\n",
+    "\n",
+    "*  isb-cgc-bq.TCGA_versioned.RNAseq_hg38_gdc_r35\n",
+    "*  isb-cgc-bq.TCGA.masked_somatic_mutation_hg38_gdc_current\n",
+    "\n",
+    "And for our proteomic data type:\n",
+    "\n",
+    "* isb-cgc-bq.TCGA.quant_proteome_TCGA_breast_cancer_pdc_current\n",
+    "* isb-cgc-bq.TCGA.quant_proteome_TCGA_ovarian_JHU_pdc_current\n",
+    "* isb-cgc-bq.TCGA.quant_proteome_TCGA_ovarian_PNNL_pdc_current\n",
+    "\n",
+    "To retrieve data from BigQuery we have to authenticate and provide a project to charge. The cost of executing the queries in this notebook total to a few cents.\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "google_project = \"YOUR-GOOGLE-PROJECT\"\n",
+    "client = bigquery.Client(project=google_project) # replace this project with your own\n",
+    "auth.authenticate_user()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# BQ SQL queries\n",
+    "\n",
+    "\n",
+    "SQL queries are fundamentally very similar to Excel macros or subsetting R data frames, where the syntax of subsetting an R data frame is as follows:\n",
+    "\n",
+    "    dataframe[ ,column ][ conditional ]\n",
+    "\n",
+    "The equivalent operation in SQL would look like this:\n",
+    "\n",
+    "    SELECT column FROM table WHERE conditional\n",
+    "\n",
+    "For our first query we will retrieve the RNA sequencing fpkm values, the gene names, the project name specifically for tumor samples. We will use the identifiers retrieved from CDA to subset for only those cases in our simple cohort. For the purposes of this instructional notebook we are focusing exclusively on the gene ERBB2."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "expression_query = f\"\"\"\n",
+    "  select\n",
+    "    case_barcode,\n",
+    "    project_short_name,\n",
+    "    gene_name,\n",
+    "    fpkm_uq_unstranded,\n",
+    "    sample_type_name\n",
+    "  from `isb-cgc-bq.TCGA_versioned.RNAseq_hg38_gdc_r35`\n",
+    "  where case_barcode in ({formatted_identifiers})\n",
+    "  and gene_name = 'ERBB2'\n",
+    "  and sample_type_name = 'Primary Tumor'\n",
+    "\"\"\"\n",
+    "query_job = client.query(expression_query)\n",
+    "expr_df = query_job.result().to_dataframe()\n",
+    "expr_df.head(3)\n",
+    "#len(expr_df)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Next we are querying the mutation table, somatic mutations in these tables are all called from tumor samples and in the gene ERBB2."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mutation_query = f\"\"\"\n",
+    "  select\n",
+    "    case_barcode,\n",
+    "    project_short_name,\n",
+    "    SYMBOL,\n",
+    "    Variant_Classification\n",
+    "  from `isb-cgc-bq.TCGA_versioned.masked_somatic_mutation_hg38_gdc_r36`\n",
+    "  where case_barcode in ({formatted_identifiers})\n",
+    "  and SYMBOL = 'ERBB2'\n",
+    "\"\"\"\n",
+    "query_job = client.query(mutation_query)\n",
+    "mutation_df = query_job.result().to_dataframe()\n",
+    "mutation_df.head(3)\n",
+    "#len(mutation_df)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The final query before we join between our three data types are on PDC quantitative proteome tables. These data are split into separate tables by \"project\" so we use the union function to concatenate them. We also join to the case and aliquot mapping tables to retrieve `sample_type` so we can subset for Tumor samples only."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "abundance_query = f\"\"\"\n",
+    "  select\n",
+    "    meta.case_submitter_id,\n",
+    "    gene_symbol,\n",
+    "    quant.protein_abundance_log2ratio,\n",
+    "    aliquot.sample_type\n",
+    "  from (select *\n",
+    "    from `isb-cgc-bq.TCGA_versioned.quant_proteome_TCGA_breast_cancer_pdc_V2_10`\n",
+    "    union all select * from `isb-cgc-bq.TCGA_versioned.quant_proteome_TCGA_ovarian_JHU_pdc_V2_10`\n",
+    "    union all select * from `isb-cgc-bq.TCGA_versioned.quant_proteome_TCGA_ovarian_PNNL_pdc_V2_10`) quant\n",
+    "  join `isb-cgc-bq.PDC_metadata_versioned.case_metadata_V2_10` meta\n",
+    "  on quant.case_id = meta.case_id\n",
+    "  join `isb-cgc-bq.PDC_metadata_versioned.aliquot_to_case_mapping_V2_10` aliquot\n",
+    "  on quant.aliquot_id = aliquot.aliquot_id\n",
+    "  where meta.case_submitter_id in ({formatted_identifiers})\n",
+    "  and gene_symbol = 'ERBB2'\n",
+    "\"\"\"\n",
+    "query_job = client.query(abundance_query)\n",
+    "abundance_df = query_job.result().to_dataframe()\n",
+    "abundance_df.head(3)\n",
+    "#len(abundance_df)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Finally we can use BigQuery to join between the three other queries we generated for a table containing the project, gene name, fpkm, protein abundance, and variant classification. This returns a table of 214 cases close to our expected 265."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "combined_query = f\"\"\"\n",
+    "  select\n",
+    "    expression.case_barcode,\n",
+    "    expression.project_short_name,\n",
+    "    expression.gene_name,\n",
+    "    fpkm_uq_unstranded,\n",
+    "    protein_abundance_log2ratio,\n",
+    "    Variant_Classification\n",
+    "  from ({expression_query}) expression\n",
+    "  join ({abundance_query}) abundance\n",
+    "    on expression.case_barcode = abundance.case_submitter_id\n",
+    "  full outer join ({mutation_query}) mutation\n",
+    "    on expression.case_barcode = mutation.case_barcode\n",
+    "    and expression.project_short_name = mutation.project_short_name\n",
+    "  where fpkm_uq_unstranded is not null\n",
+    "\"\"\"\n",
+    "#print(combined_query)\n",
+    "query_job = client.query(combined_query)\n",
+    "combined_df = query_job.result().to_dataframe()\n",
+    "combined_df\n",
+    "#len(combined_df)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Graphics\n",
+    "\n",
+    "With this joined data frame in hand we can begin plotting data characteristics, such as a scatter plot comparing the log of fpkm to the protein abundance ratios."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import matplotlib\n",
+    "import numpy as np\n",
+    "\n",
+    "combined_df['log_fpkm_uq'] = np.log(combined_df['fpkm_uq_unstranded'])\n",
+    "\n",
+    "fig, ax = plt.subplots(figsize=(5, 3))\n",
+    "combined_df.plot(kind=\"scatter\", x='log_fpkm_uq', y='protein_abundance_log2ratio', ax=ax)\n",
+    "ax.set_ylabel(\"Protein Abundance log2ratio\")\n",
+    "ax.set_xlabel(\"log(FPKM UQ)\")\n",
+    "fig.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "And finally we can generate a boxplot of RNA expression value split by mutation type present in the gene."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mutated = combined_df[combined_df['Variant_Classification'] == 'Missense_Mutation']['log_fpkm_uq']\n",
+    "wildtype = combined_df[combined_df['Variant_Classification'] != 'Missense_Mutation']['log_fpkm_uq']\n",
+    "fig, ax1 = plt.subplots(figsize=(5, 3))\n",
+    "bp = ax1.boxplot(x=[mutated, wildtype], tick_labels=['Missense', 'Wild Type'], )\n",
+    "ax1.set(ylabel=\"log(FPKM UQ)\")\n",
+    "fig.show()"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "name": "python",
+   "version": "3.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

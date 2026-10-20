@@ -6,7 +6,7 @@
    "source": [
     "# What's new in CDA\n",
     "\n",
-    "*Standalone -- no prior vignette required.*"
+    "*Standalone -- no prior notebook required.*"
    ]
   },
   {
@@ -15,7 +15,7 @@
    "source": [
     "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/PLACEHOLDER_VIDEO_ID\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>\n",
     "\n",
-    "Watch the video above for the quick version, or just read along below -- every cell here is real and already run. Want to try it yourself with your own search term? Open this notebook in [Google Colab](https://colab.research.google.com/github/CancerDataAggregator/Community-Notebooks/blob/main/Tutorials/00E_whats_new.ipynb) -- same notebook, fully live."
+    "Watch the video above for the quick version, or just read along below -- every cell here is real and already run. This notebook is fully live, so you can also just run it yourself and swap in whatever you're actually searching for."
    ]
   },
   {
@@ -28,9 +28,21 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": [
+     "hide_code"
+    ]
+   },
    "outputs": [],
    "source": [
+    "try:\n",
+    "  from itables import(\n",
+    "     init_notebook_mode, show \n",
+    "    ) \n",
+    "except:\n",
+    "  !pip install -r https://raw.githubusercontent.com/CancerDataAggregator/Community-Notebooks/main/requirements.txt\n",
+    "\n",
+    "\n",
     "from cdapython import *\n",
     "from itables import init_notebook_mode, show\n",
     "init_notebook_mode(all_interactive=True)\n",
@@ -87,7 +99,7 @@
     "\n",
     "CDA's anatomic_site and disease fields are backed by real medical ontologies -- UBERON for anatomy, ICD-O-3 for disease. A broad term automatically pulls in everything more specific underneath it in that tree, so a search for eye also catches uvea without me ever having to know uvea was part of the eye.\n",
     "\n",
-    "It only goes one direction, though. Searching for eye reaches down to everything underneath it -- but searching for uvea or iris won't reach back up to eye, and it won't pull in unrelated parts of the eye like the retina either:"
+    "It only goes one direction, though. Searching for eye reaches down to everything underneath it -- but searching for uvea or iris won't reach back up to eye, and it won't pull in unrelated parts of the eye like the retina either."
    ]
   },
   {
@@ -185,9 +197,9 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "One word, a filter built from real values instead of guesses, and a new way to see exactly why CDA matched what it matched. Everything above is real and already run. Want to try your own search? Open this notebook in [Google Colab](https://colab.research.google.com/github/CancerDataAggregator/Community-Notebooks/blob/main/Tutorials/00E_whats_new.ipynb) -- same notebook, fully live, swap in whatever you're actually searching for.\n",
+    "One word, a filter built from real values instead of guesses, and a new way to see exactly why CDA matched what it matched. Everything above is real and already run -- and since this whole notebook is live, feel free to change `melanoma` to whatever you're actually searching for and re-run it yourself.\n",
     "\n",
-    "For the deeper walkthroughs this builds on, see [Is there anything about X?](01_global_search.ipynb) and [Getting oriented before I filter](02_systematic_browsing.ipynb)."
+    "For the deeper walkthroughs this builds on, see [Is there anything about X?](./03_CN_global_search.ipynb) and [Getting oriented before I filter](./04_CN_systematic_browsing.ipynb)."
    ]
   }
  ],

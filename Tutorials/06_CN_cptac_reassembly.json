@@ -6,7 +6,7 @@
    "source": [
     "# Please tell me you know how to find all the CPTAC data\n",
     "\n",
-    "*Standalone -- no prior vignette required.*"
+    "*Standalone -- no prior notebook required.*"
    ]
   },
   {
@@ -21,9 +21,21 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": [
+     "hide_code"
+    ]
+   },
    "outputs": [],
    "source": [
+    "try:\n",
+    "  from itables import(\n",
+    "     init_notebook_mode, show \n",
+    "    ) \n",
+    "except:\n",
+    "  !pip install -r https://raw.githubusercontent.com/CancerDataAggregator/Community-Notebooks/main/requirements.txt\n",
+    "\n",
+    "\n",
     "from cdapython import *\n",
     "from itables import init_notebook_mode, show\n",
     "init_notebook_mode(all_interactive=True)\n",
@@ -102,7 +114,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "280 subjects, 36,942 files -- a much more targeted result than my unfiltered CPTAC pull. Since I'll actually need to retrieve these files, I want the `drs_uri` for each one:"
+    "280 subjects, 36,942 files -- a much more targeted result than my unfiltered CPTAC pull. Since I'll actually need to retrieve these files, I want the `drs_uri` for each one -- and I can save the result straight to a manifest file instead of just printing it to the screen:"
    ]
   },
   {
@@ -113,7 +125,9 @@
    "source": [
     "get_file_data(\n",
     "    match_all=['project_name = *cptac*'],\n",
-    "    match_any=['anatomic_site = *kidney*', 'anatomic_site = *bladder*']\n",
+    "    match_any=['anatomic_site = *kidney*', 'anatomic_site = *bladder*'],\n",
+    "    return_data_as='tsv',\n",
+    "    output_file='cptac_kidney_bladder_files.tsv'\n",
     ")"
    ]
   },

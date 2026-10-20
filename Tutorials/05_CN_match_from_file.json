@@ -6,7 +6,7 @@
    "source": [
     "# Checking my own subject list against what else CDA knows\n",
     "\n",
-    "*Standalone -- no prior vignette required.*"
+    "*Standalone -- no prior notebook required.*"
    ]
   },
   {
@@ -19,9 +19,21 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": [
+     "hide_code"
+    ]
+   },
    "outputs": [],
    "source": [
+    "try:\n",
+    "  from itables import(\n",
+    "     init_notebook_mode, show \n",
+    "    ) \n",
+    "except:\n",
+    "  !pip install -r https://raw.githubusercontent.com/CancerDataAggregator/Community-Notebooks/main/requirements.txt\n",
+    "\n",
+    "\n",
     "from cdapython import *\n",
     "from itables import init_notebook_mode, show\n",
     "init_notebook_mode(all_interactive=True)\n",
@@ -60,6 +72,8 @@
    "metadata": {},
    "source": [
     "This matters because I never had to convert anything -- the exact IDs sitting in my existing GDC export work directly as a CDA lookup key, as long as `upstream_id` is what I tell it to match against instead of CDA's own ID scheme. Adding `upstream_identifiers.*` shows me exactly which sources have data on each case -- these are all TCGA-OV subjects pulled from GDC, so I'm curious whether any of them also show up in PDC or another source I wasn't already looking at.\n",
+    "\n",
+    "(If you already have *CDA's own* subject IDs instead of a source's native IDs -- for example, because you saved them from an earlier CDA search -- set `cda_column_to_match` to `subject_id` instead of `upstream_id`, and everything else here works the same way.)\n",
     "\n",
     "Before pulling full records, I want a shape of what I'd actually be getting:"
    ]

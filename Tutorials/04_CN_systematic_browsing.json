@@ -6,7 +6,7 @@
    "source": [
     "# Getting oriented before I write a real query\n",
     "\n",
-    "*Standalone -- no prior vignette required.*"
+    "*Standalone -- no prior notebook required.*"
    ]
   },
   {
@@ -19,9 +19,21 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": [
+     "hide_code"
+    ]
+   },
    "outputs": [],
    "source": [
+    "try:\n",
+    "  from itables import(\n",
+    "     init_notebook_mode, show \n",
+    "    ) \n",
+    "except:\n",
+    "  !pip install -r https://raw.githubusercontent.com/CancerDataAggregator/Community-Notebooks/main/requirements.txt\n",
+    "\n",
+    "\n",
     "from cdapython import *\n",
     "from itables import init_notebook_mode, show\n",
     "init_notebook_mode(all_interactive=True)\n",
@@ -134,7 +146,82 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "493 subjects in that age bracket alone. I checked the table landscape, found the right column by description instead of guessing, looked at real values before filtering, and used `NULL` and numeric ranges deliberately rather than stumbling into them. None of this required knowing the underlying data model or any source's internal vocabulary -- just a willingness to look before leaping, which is the whole point of browsing first when the stakes are higher than idle curiosity."
+    "493 subjects in that age bracket alone. I checked the table landscape, found the right column by description instead of guessing, looked at real values before filtering, and used `NULL` and numeric ranges deliberately rather than stumbling into them."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "I want to look more closely at this age bracket, so I'll run `get_subject_data` instead of `summarize_subjects` to get full rows back:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "get_subject_data(match_all=['60 < age_at_observation <= 70', 'diagnosis = *adenocarcinoma*', 'species = human'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Several of these subjects have multiple diagnoses and data from multiple sources, but only one `age_at_observation` value. I want to know why, so I'll have `cdapython` `collate_results` -- that is, match up every observation data point to the row it came from, so I can see what the original data actually looked like:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sixty2seventy_collated = get_subject_data(match_all=['60 < age_at_observation <= 70', 'diagnosis = *adenocarcinoma*', 'species = human'], collate_results=True)\n",
+    "sixty2seventy_collated"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now each row has an embedded dataframe of all the relevant observation info. Let's look at the first row -- the `observation_data` column, row zero:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sixty2seventy_collated['observation_data'][0]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It looks like in the original source data, only some of the records included age information. I can see even more detail by adding the entire observation table with `observation.*` -- the asterisk means \"anything inside the database's observation table\":"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "all_obs_sixty2seventy_collated = get_subject_data(match_all=['60 < age_at_observation <= 70', 'diagnosis = *adenocarcinoma*', 'species = human'], add_columns='observation.*', collate_results=True)\n",
+    "all_obs_sixty2seventy_collated['observation_data'][0]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This is very helpful for assessing whether individual subjects actually have the types of data you need, and shows exactly where each bit of data came from -- but it wouldn't be efficient to look at each subject one by one. For narrowing a whole result set this way at once, see `expand_subject_results()` in [Subjects with multiple data types](./07_CN_multimodal_subjects.ipynb).\n",
+    "\n",
+    "None of this required knowing the underlying data model or any source's internal vocabulary beforehand -- just a willingness to look before leaping, which is the whole point of browsing first when the stakes are higher than idle curiosity."
    ]
   }
  ],

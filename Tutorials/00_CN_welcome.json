@@ -1,0 +1,127 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Welcome to the CDA example notebook set.\n",
+    "\n",
+    "Below you will find links to open the interactive versions of all of our example notebooks. Each one will open in a new tab (or new Colab session). Every notebook here is standalone -- you can open any single one and run it top to bottom without having run any of the others first."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Notebook Quicklinks\n",
+    "\n",
+    "### Reference / templates\n",
+    "- [Quick Start](./01_CN_basic_commands.ipynb): See all the basic cdapython functions in one place\n",
+    "- [CDA Madlibs](./02_CN_cda_madlibs.ipynb): A fill-in-the-blank set of commands you can use as a template to build your own queries\n",
+    "\n",
+    "### Standalone walkthroughs\n",
+    "- [Is there anything about X?](./03_CN_global_search.ipynb): A bare-word global search, no setup required\n",
+    "- [Getting oriented before I filter](./04_CN_systematic_browsing.ipynb): Browse tables, columns, and values deliberately before writing a real query\n",
+    "- [I have subjects, what else exists?](./05_CN_match_from_file.ipynb): Check your own list of subject IDs against everything else CDA knows\n",
+    "- [Reassembling a scattered project](./06_CN_cptac_reassembly.ipynb): Find every piece of a known project (like CPTAC) that got split across data centers\n",
+    "- [Subjects with multiple data types](./07_CN_multimodal_subjects.ipynb): Find subjects who have two or more kinds of data for the same condition\n",
+    "\n",
+    "### Specialized / advanced\n",
+    "- [Summarize available .bam files](./08_CN_sum_bams.ipynb): Build a tumor/normal .bam cohort and export it\n",
+    "- [Use CDA data with ISB-CGC BigQuery tables](./09_CN_isbcgc.ipynb): Retrieve derived multi-omic data for a CDA cohort from ISB-CGC\n",
+    "\n",
+    "### What's new\n",
+    "- [What's new in CDA](./10_CN_whats_new.ipynb): Demo of the newest CDA features, with video walkthrough"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## How to use these notebooks\n",
+    "\n",
+    "ipython notebooks let you intersperse code with text, and run bits of code one at a time, in any order. Google Colab is a service that gives you a small personal computer in the cloud, for free.\n",
+    "\n",
+    "If you want to run a notebook as-is, choose a notebook, then either select `Run all` from the `Runtime` menu, or use the keyboard shortcut shift + enter to execute each code cell in order.\n",
+    "\n",
+    "If you want to use these notebooks as a starting place for your own search, you can safely change any parameters. Since this is a small cloud computer, if the instance breaks, or you can't get the code back to working again, you can always close this browser tab and open a new one to get a fresh copy.\n",
+    "\n",
+    "<div style=\"background-color:#f9cfbf;color:#000000;padding:20px;\">\n",
+    "<strong>Save your changes!</strong>\n",
+    "Any changes you make to the code here will disappear as soon as you close this window. If you have used this notebook to do your own searches, be sure to save a copy to your Google Drive using the <code>File</code> menu before you close the window. Then you can upload your changed notebooks to Colab next time you work on it.\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## About cdapython\n",
+    "\n",
+    "With CDA you search by harmonized, common-language terms. Using simple function calls you can get information about the subjects, files, or specimens you care about, in a standard dataframe (or TSV) format you can open in Excel, feed into a pipeline, or upload to your favorite cloud resource.\n",
+    "\n",
+    "`cdapython` has these core functions:\n",
+    "\n",
+    "---\n",
+    "- **`tables()`** shows you what tables are available to search\n",
+    "- **`columns()`** shows you what columns are in each table, and what they mean\n",
+    "- **`column_values()`** returns a unique'd list of all values in a column, with counts\n",
+    "- **`summarize_subjects()`** returns a profile of subject data matching your search criteria\n",
+    "- **`summarize_files()`** returns a profile of file data matching your search criteria\n",
+    "- **`get_subject_data()`** returns full subject rows matching your search criteria\n",
+    "- **`get_file_data()`** returns full file rows matching your search criteria\n",
+    "- **`intersect_subject_results()`** / **`intersect_file_results()`** combine two result sets via intersection\n",
+    "- **`expand_subject_results()`** / **`expand_file_results()`** flatten a nested per-subject or per-file column into a plain table\n",
+    "---\n",
+    "\n",
+    "All of these functions take several parameters to let you tune your results. Use the `help()` function inside a notebook to find out more about any of them, e.g. `help(columns)`."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## About CDA data\n",
+    "\n",
+    "You can think of the CDA as a really, really enormous spreadsheet full of data. To search this spreadsheet, you select columns that have data you're interested in, then filter the rows down to only the values you care about.\n",
+    "\n",
+    "<div class=\"cdanote\" style=\"background-color:#b3e5d5;color:black;padding:20px;\">\n",
+    "\n",
+    "CDA currently pulls data from six sources:\n",
+    "<ul>\n",
+    "<li><b>The <a href=\"https://gdc.cancer.gov/\">Genomic Data Commons</a> (GDC)</b></li>\n",
+    "<li><b>The <a href=\"https://proteomic.datacommons.cancer.gov/pdc/\">Proteomic Data Commons</a> (PDC)</b></li>\n",
+    "<li><b>The <a href=\"https://imaging.datacommons.cancer.gov/\">Imaging Data Commons</a> (IDC)</b></li>\n",
+    "<li><b>The <a href=\"https://dataservice.datacommons.cancer.gov/#/home\">General Commons</a> (GC)</b></li>\n",
+    "<li><b>The <a href=\"https://caninecommons.cancer.gov/#/explore\">Integrated Canine Data Commons</a> (ICDC)</b></li>\n",
+    "<li><b>The <a href=\"https://datacommons.cancer.gov/repository/clinical-and-translational-data-commons\">Clinical and Translational Data Commons</a> (CTDC)</b></li>\n",
+    "</ul>\n",
+    "\n",
+    "(Note: <a href=\"https://www.isb-cgc.org/\">ISB-CGC</a> is a close partner of CDA -- it's the source of all mutation data in CDA, and separately consumes CDA's phenotypic data for its own tools -- but it isn't one of the six source data centers itself. See the ISB-CGC notebook in this set for more on that relationship.)\n",
+    "\n",
+    "The CDA makes this data searchable in two main endpoints:\n",
+    "\n",
+    "<ul>\n",
+    "<li><b>subject:</b> a patient entity capturing the study-independent metadata for research subjects. Human research subjects are usually not traceable to a particular person, to protect their privacy.</li>\n",
+    "<li><b>file:</b> a unit of data about subjects, research subjects, specimens, or their associated information.</li>\n",
+    "</ul>\n",
+    "</div>\n",
+    "\n",
+    "If you're looking to build a cohort of distinct individuals who meet some criteria, you'd search using `get_subject_data()`, which returns a table with one row per subject -- then use the `add_columns` parameter to pull in extra information per subject (file details, treatment history, whatever's relevant to what you're building)."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "name": "python",
+   "version": "3.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

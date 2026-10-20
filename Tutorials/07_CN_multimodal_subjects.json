@@ -6,7 +6,7 @@
    "source": [
     "# Finding subjects who have more than one kind of data\n",
     "\n",
-    "*Standalone -- no prior vignette required.*"
+    "*Standalone -- no prior notebook required.*"
    ]
   },
   {
@@ -19,9 +19,21 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": [
+     "hide_code"
+    ]
+   },
    "outputs": [],
    "source": [
+    "try:\n",
+    "  from itables import(\n",
+    "     init_notebook_mode, show \n",
+    "    ) \n",
+    "except:\n",
+    "  !pip install -r https://raw.githubusercontent.com/CancerDataAggregator/Community-Notebooks/main/requirements.txt\n",
+    "\n",
+    "\n",
     "from cdapython import *\n",
     "from itables import init_notebook_mode, show\n",
     "init_notebook_mode(all_interactive=True)\n",
@@ -145,14 +157,21 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "expand_subject_results(ct_and_mutation, 'file_data')"
+    "expanded = expand_subject_results(ct_and_mutation, 'file_data')\n",
+    "expanded"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Same subjects as before, but now anyone with multiple files gets multiple rows, and each row only shows the values that actually go together. I now have exactly the cohort I needed -- confirmed to have both modalities, with the files per subject untangled instead of guessed at -- without ever needing to know how the underlying tables related to each other before I started."
+    "Same subjects as before, but now anyone with multiple files gets multiple rows, and each row only shows the values that actually go together.\n",
+    "\n",
+    "Scroll through the table and you'll notice the CT rows and the mutation rows don't look alike. CT scans are usually composed of many layered images, so a given CT row's `drs_uri` points at one image in that set, and you'll see many rows share the same subject -- that's normal, not a duplicate. CT rows also generally don't have `tumor_vs_normal` values, because an image on its own isn't a comparison between two tissue states.\n",
+    "\n",
+    "The mutation rows look different: each one typically has a single `drs_uri`, because mutation files aren't usually split up the way image series are. They *do* have `tumor_vs_normal` values, because identifying a mutation requires a comparison -- a basepair is only a \"mutation\" relative to someone's own normal tissue, so every mutation file here was built by comparing a person's tumor and normal samples.\n",
+    "\n",
+    "I now have exactly the cohort I needed -- confirmed to have both modalities, with the files per subject untangled instead of guessed at -- without ever needing to know how the underlying tables related to each other before I started."
    ]
   }
  ],

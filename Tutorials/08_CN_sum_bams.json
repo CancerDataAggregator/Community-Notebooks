@@ -1,0 +1,177 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Summarize the subject metadata available for bam files"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "try:\n",
+    "  from itables import(\n",
+    "     init_notebook_mode, show \n",
+    "    ) \n",
+    "except:\n",
+    "  !pip install -r https://raw.githubusercontent.com/CancerDataAggregator/Community-Notebooks/main/requirements.txt\n",
+    "\n",
+    "\n",
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "from itables import init_notebook_mode, show\n",
+    "init_notebook_mode(all_interactive=True)\n",
+    "import itables.options as opt\n",
+    "\n",
+    "opt.classes=\"display nowrap compact\"\n",
+    "opt.buttons=[\"copyHtml5\", \"csvHtml5\", \"excelHtml5\"]\n",
+    "opt.maxBytes=0\n",
+    "\n",
+    "from cdapython import *"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "I'm a developer, and I have written a new mutation calling pipeline. I've tested it on my own small dataset, but now I'm looking for a larger set of bam files that I can run through it."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "First, decide what column to search. I'm looking for columns that are part of the file table:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "columns(table=\"file\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "`format` is what I'm looking for. Now I want to see whether `bam` is a valid value in it:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "column_values(\"format\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The value in the database is `BAM`, so I'm going to use that. According to the column values, there's around 200 thousand files, but I'm interested in comparing variants for individuals, so I want a count of how many subjects have bam files:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "get_subject_data( match_all=[\"format = bam\"])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "I can also get a summary of the subject (or any other table) information for these files so I can decide what to filter next:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "summarize_subjects( match_all=[\"format = bam\"])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "For instance, I might look for all of the subjects who have both a tumor sample and a normal control associated with them, because I'm interested in de novo cancer mutations. This means that I want to search the same column twice, once for subjects who have normal tissue and once for subjects that have tumor tissue, and only keep the intersection of those results:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "normal = get_subject_data( match_all=[\"tumor_vs_normal = normal\", \"format = bam\"])\n",
+    "tumor = get_subject_data( match_all=[\"tumor_vs_normal = tumor\", \"format = bam\"])\n",
+    "\n",
+    "both = intersect_subject_results(normal, tumor)\n",
+    "both"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It looks like there are about 22 thousand bams that contain comparisons between normal and tumor tissue. Now I could save that output to a file to browse through"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "both.to_csv('bams_tumor_normal.csv')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Or I could keep filtering by other fields. For instance, I might want just one anatomical location:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "normal_lung = get_subject_data( match_all=[\"tumor_vs_normal = normal\", \"format = bam\", \"anatomic_site = lung\"])\n",
+    "tumor_lung = get_subject_data( match_all=[\"tumor_vs_normal = tumor\", \"format = bam\", \"anatomic_site = lung\"])\n",
+    "both_lung = intersect_subject_results(normal_lung, tumor_lung)\n",
+    "both_lung"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "name": "python",
+   "version": "3.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

@@ -3,7 +3,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "60929be1",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -30,17 +29,15 @@
   },
   {
    "cell_type": "markdown",
-   "id": "839851d8",
    "metadata": {},
    "source": [
     "# CDA Madlibs\n",
     "\n",
-    "A fill in the blank notebook for basic CDA functions. Good for learning syntax and finding errors in your own code. Replace any `____#____` with your search term and the code should run. Be sure to leave quotes and stars around words that look like `\"*____#____*\"` or `\"____#____\"` and to not add quotes for `____#____`. Text after a ## in a code block is a comment explaining what the blank should be filled with, just like a madlib."
+    "A fill in the blank notebook for `cdapython` functions, from the most basic to some of the newer/more advanced ones. Good for learning syntax and finding errors in your own code. Replace any `____#____` with your search term and the code should run. Be sure to leave quotes and stars around words that look like `\"*____#____*\"` or `\"____#____\"` and to not add quotes for `____#____`. Text after a ## in a code block is a comment explaining what the blank should be filled with, just like a madlib."
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "0d94a85e",
    "metadata": {},
    "source": [
     "## Finding Terms to search"
@@ -49,7 +46,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "9ea37120",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -61,7 +57,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "422012e7",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -73,7 +68,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "2b17acfd",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -87,7 +81,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "4ae85a5e",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -102,7 +95,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "dcbd3734",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -114,8 +106,59 @@
    ]
   },
   {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Same as above, but restricted to a single upstream data source -- useful if you only care what values show up\n",
+    "# at one particular data center. Valid data_source values are 'GDC', 'PDC', 'IDC', 'GC', 'ICDC', and 'CTDC'.\n",
+    "# Unlike every other function in this notebook, column_values() only accepts ONE data_source at a time, not a list.\n",
+    "\n",
+    "column_values( \"____1____\", data_source = \"____2____\" )\n",
+    "\n",
+    "## 1) column name you want to see the possible values for\n",
+    "## 2) the single data source you want to restrict to, e.g. GDC"
+   ]
+  },
+  {
    "cell_type": "markdown",
-   "id": "a35c37e7",
+   "metadata": {},
+   "source": [
+    "## Searching without knowing a column name at all\n",
+    "\n",
+    "Every function below that starts with `summarize_` or `get_` also accepts one or more bare search terms with no column name attached, searched across every column at once. This is the fastest way to get a first answer to \"is there any data about X\" before you've looked up any column names."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Searches every column at once for your word, and gives you back a summary\n",
+    "\n",
+    "summarize_subjects('____1____')\n",
+    "\n",
+    "## 1) a plain word or phrase to search for, e.g. 'kidney'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Adding a second word means \"must touch both\" -- every result below is connected to BOTH words somewhere in its record\n",
+    "\n",
+    "summarize_subjects('____1____', '____2____')\n",
+    "\n",
+    "## 1) first plain word or phrase to search for\n",
+    "## 2) second plain word or phrase you ALSO want every result to touch"
+   ]
+  },
+  {
+   "cell_type": "markdown",
    "metadata": {},
    "source": [
     "## Looking at data"
@@ -124,7 +167,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "7b07c665",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -139,7 +181,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "67e0899d",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -161,7 +202,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "de0a4126",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -182,7 +222,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "d3c31871",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -199,7 +238,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "996d2124",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -222,7 +260,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "5e890af5",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -244,7 +281,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "f5d61ab7",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -262,25 +298,170 @@
     "## 7) fourth column name you want to filter\n",
     "## 8) fourth column value you want to filter by"
    ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Restrict any search to one or more specific upstream data sources. Unlike column_values(), this DOES accept a list.\n",
+    "# Valid values are 'GDC', 'PDC', 'IDC', 'GC', 'ICDC', and 'CTDC'.\n",
+    "\n",
+    "get_subject_data( match_all=['____1____ = ____2____'], data_source = ['____3____'])\n",
+    "\n",
+    "## 1) column name you want to filter\n",
+    "## 2) column value you want to filter by\n",
+    "## 3) the data source(s) you want to restrict to, e.g. 'GDC' -- or a list like ['GDC', 'IDC']"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Pulling in extra columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# add_columns pulls in columns from a second table into your results.\n",
+    "# A single column name adds just that column; a table name followed by .* (e.g. 'file.*') adds every column from that table.\n",
+    "\n",
+    "get_subject_data( match_all=['____1____ = ____2____'], add_columns = '____3____')\n",
+    "\n",
+    "## 1) column name you want to filter\n",
+    "## 2) column value you want to filter by\n",
+    "## 3) the column (or table.*) you want added, e.g. 'file.*'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# collate_results=True pairs up all the related values from an added table (like file.* above) so that values\n",
+    "# that actually belong to the same row stay together, instead of being mashed into separate lists.\n",
+    "# This also works with summarize_subjects() and summarize_files().\n",
+    "\n",
+    "get_subject_data( match_all=['____1____ = ____2____'], add_columns = '____3____', collate_results = True)\n",
+    "\n",
+    "## 1) column name you want to filter\n",
+    "## 2) column value you want to filter by\n",
+    "## 3) the column (or table.*) you want added, e.g. 'file.*'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# When collate_results=True has given you a nested column, expand_subject_results() (or expand_file_results()\n",
+    "# for file-based searches) flattens it into a plain table, with one row per nested value instead of one row per subject.\n",
+    "\n",
+    "my_results = get_subject_data( match_all=['____1____ = ____2____'], add_columns = '____3____', collate_results = True)\n",
+    "expand_subject_results(my_results, '____4____')\n",
+    "\n",
+    "## 1) column name you want to filter\n",
+    "## 2) column value you want to filter by\n",
+    "## 3) the column (or table.*) you want added, e.g. 'file.*'\n",
+    "## 4) the name of the new nested column to flatten, e.g. 'file_data'"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Seeing why a harmonized value matched"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# add_extras shows the real underlying vocabulary behind a harmonized match -- it doesn't change which rows match,\n",
+    "# it just annotates why. This is most useful on anatomic_site and disease, the two fields backed by a real ontology.\n",
+    "# Valid values are 'synonym_terms', 'slim_terms', 'containing_terms', or 'all'.\n",
+    "\n",
+    "summarize_subjects('____1____', add_extras = ['____2____'])\n",
+    "\n",
+    "## 1) a plain word or phrase to search for, e.g. 'melanoma'\n",
+    "## 2) which extra metadata to add, e.g. 'all'"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Searching with a list of IDs you already have"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# match_from_file lets you check a TSV file of IDs you already have against CDA, instead of typing each one into a filter by hand.\n",
+    "# If your file has a data center's own native IDs (e.g. a GDC case UUID), match against 'upstream_id'.\n",
+    "# If your file has CDA's own subject IDs, match against 'subject_id' instead.\n",
+    "\n",
+    "get_subject_data(\n",
+    "    match_from_file={\n",
+    "        'input_file': '____1____',\n",
+    "        'input_column': '____2____',\n",
+    "        'cda_column_to_match': '____3____'\n",
+    "    }\n",
+    ")\n",
+    "\n",
+    "## 1) the name of your TSV file, e.g. 'my_cases.tsv'\n",
+    "## 2) the column in that file with the IDs in it\n",
+    "## 3) the CDA column to match against -- 'upstream_id' for native source IDs, 'subject_id' for CDA's own IDs"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Combining two separate searches"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# If you need an \"AND\" condition across two different values of the SAME column (like two different file_types,\n",
+    "# where no single file can have both), match_all can't do it in one call -- run two separate searches and\n",
+    "# intersect them instead. intersect_file_results() works the same way for file-based searches.\n",
+    "\n",
+    "first_group = get_subject_data(match_all=['____1____ = ____2____'])\n",
+    "second_group = get_subject_data(match_all=['____1____ = ____3____'])\n",
+    "intersect_subject_results(first_group, second_group)\n",
+    "\n",
+    "## 1) the column both searches share, e.g. 'file_type'\n",
+    "## 2) the value for the first group, e.g. 'CT Image Storage'\n",
+    "## 3) the value for the second group, e.g. 'Annotated Somatic Mutation'"
+   ]
   }
  ],
  "metadata": {
   "kernelspec": {
-   "display_name": "Python 3 (ipykernel)",
+   "display_name": "Python 3",
    "language": "python",
    "name": "python3"
   },
   "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
    "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.10.6"
+   "version": "3.10"
   }
  },
  "nbformat": 4,
