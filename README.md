@@ -4,7 +4,7 @@ This public repository is a place to share demonstration notebooks that show wha
 
 ## Launch CDA Community Notebooks
 
-To try out community notebooks, no install required! [Try it now](https://colab.research.google.com/github/CancerDataAggregator/Community-Notebooks/blob/main/Tutorials/00_CN_Welcome.ipynb)
+To try out community notebooks, no install required! [Try it now](https://colab.research.google.com/github/CancerDataAggregator/Community-Notebooks/blob/main/Tutorials/00_CN_welcome.ipynb)
 
 If you would like to bulk download the notebooks the easiest way is to clone this repo.
 
@@ -21,7 +21,7 @@ Submitting a notebook:
 
 - add it to the Tutorials folder and make a pull request
 - If your notebook uses tools or modules that we do not have preloaded in google colab, please add them to this [requirements file](https://github.com/CancerDataAggregator/Community-Notebooks/blob/main/requirements.txt) as part of your pull request.
-- Be sure to add your notebook information and a relative link to it under "Community Contributed Notebooks" to the [welcome page](https://github.com/CancerDataAggregator/Community-Notebooks/blob/main/Tutorials/00_CN_Welcome.ipynb)
+- Be sure to add your notebook information and a relative link to it under "Community Contributed Notebooks" to the [welcome page](https://github.com/CancerDataAggregator/Community-Notebooks/blob/main/Tutorials/00_CN_welcome.ipynb)
 - Please be sure to fill out all fields of the pull request template. Failure to fill in these fields will result in a delay in approving your work.
 - Our bots will run basic checks on your notebook, and build you a working preview site. Please check that your code runs as expected in the preview site.
 - Watch your PR for bot notifications and change requests
